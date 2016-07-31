@@ -1,0 +1,926 @@
+\documentclass[8pt]{extarticle}
+
+% needed for \marginsize command
+\usepackage{anysize}
+
+\usepackage{geometry}
+\geometry{a4paper, top=0.5cm, left=0.5cm, right=0.5cm, bottom=0.5cm}
+
+\usepackage{multicol}
+
+\usepackage{supertabular}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% With default configuration, references made by hyperref have very ugly
+% red borders. We can get rid of it by using this kind of customization:
+%
+% (source: http://tex.stackexchange.com/questions/823/remove-ugly-borders-around-clickable-cross-references-and-hyperlinks )
+\hypersetup{
+    colorlinks,
+    linkcolor={black},
+    citecolor={black},
+    urlcolor={black}
+}
+
+% Prevent hyphenation whatsoever (probably not a good solution, but just a
+% quick hack, because by default the hyphenation looks weird sometimes: e.g.
+% Dock-erfile)
+\usepackage[none]{hyphenat}
+
+% provides \isempty test
+\usepackage{xifthen}
+
+%\usepackage{textpos}
+%\usepackage[showboxes]{textpos}
+
+\newenvironment{mTable}%
+{
+\setlength{\tabcolsep}{0em}
+\begin{supertabular}{p{0.23\linewidth}p{0.77\linewidth}}}%
+{\end{supertabular}}
+
+\newenvironment{allintypewriter}{\ttfamily}{\par}
+
+\newenvironment{mExample}%
+{\begin{small}}%
+{\end{small}}
+
+% Needed to provide [noitemsep] option for `itemize` and `enumerate`
+\usepackage[shortlabels]{enumitem}
+
+\setlist[itemize,1]{noitemsep, leftmargin=0.3cm}
+\setlist[itemize,2]{noitemsep, leftmargin=0.3cm}
+\setlist[itemize,3]{noitemsep, leftmargin=0.3cm}
+
+\newcommand{\mCmdArg}[1]{\begin{small}{\texttt{\textit{#1}}}\end{small}}%
+
+\newcommand{\mMono}[1]{\begin{small}{\texttt{#1}}\end{small}}%
+
+\newcommand{\mCmd}[2]{%
+\texttt{\textbf{#1}}%
+\ifthenelse{\isempty{\#2}}%
+{}%
+{ \mCmdArg{#2}}%
+}%
+
+% The shrinkheight trick is used in order to prevent LaTeX from breaking the
+% page between two rows, see:
+% http://tex.stackexchange.com/questions/316431/use-nopagebreak-or-similar-in-supertabular
+\newcommand{\mTableNoBreak}[0]{\shrinkheight{-\normalbaselineskip}}
+
+\newcommand{\mLongCmd}[2]{
+  \multicolumn{2}{l}{
+    \mCmd{#1}{#2}
+  }
+  \\
+  \mTableNoBreak
+}%
+
+\newcommand{\mSubCmd}[2]{%
+  ~~~\texttt{#1}%
+  \ifthenelse{\isempty{\#2}}%
+  {}%
+  { \mCmdArg{#2}}%
+}%
+
+\newcommand{\mLongSubCmd}[2]{
+  \multicolumn{2}{l}{
+    \mSubCmd{#1}{#2}
+  }
+  \\
+  \mTableNoBreak
+}
+
+\newcommand{\mCmdRow}[3]{
+  \mCmd{#1}{#2}
+  &
+  #3
+  \\
+  \mTableNoBreak
+}
+
+\newcommand{\mLongCmdRow}[3]{
+  \mLongCmd{#1}{#2}
+  &
+  #3
+  \\
+  \mTableNoBreak
+}
+
+\newcommand{\mSubCmdRow}[3]{
+  \mSubCmd{#1}{#2}
+  &
+  #3
+  \\
+  \mTableNoBreak
+}
+
+\newcommand{\mLongSubCmdRow}[3]{
+  \mLongSubCmd{#1}{#2}
+  &
+  #3
+  \\
+  \mTableNoBreak
+}
+
+\newcommand{\mSectionTitle}[1]{\subsection*{#1}}
+
+% Both packages provide a bold monospaced font, bold-extra seems bolder
+%\usepackage{lmodern}
+\usepackage{bold-extra}
+
+\begin{document}
+
+%\begin{multicols}{3}
+\begin{twocolumn}
+
+  \section*{DOCKERFILE QUICK REFERENCE}
+
+  \begin{mTable}
+
+    \mLongCmd
+    {FROM}
+    {<image>}
+
+    \mLongCmdRow
+    {FROM}
+    {<image>:<tag>}
+    {Sets the base image for subsequent instructions. Dockerfile must start with
+      \mMono{FROM} instruction.
+    }
+
+    \mLongCmdRow
+    {MAINTAINER}
+    {<name>}
+    {Sets the Author field for the generated images}
+
+    \mCmdRow
+    {LABEL}
+    {...}
+    {Adds metadata to an image. A label is a key-value pair}
+
+    \mLongSubCmd
+    {LABEL}
+    {<key>=<value> <key2>=<value2> ...}
+
+    \mLongSubCmd
+    {LABEL}
+    {<key> <value>}
+
+    \mCmdRow
+    {RUN}
+    {...}
+    {Executes any commands in a new layer on top of the current image and
+      commits the results. There are two forms:
+    }
+
+    \mSubCmdRow
+    {RUN}
+    {<command>}
+    {Run the command in the shell \mMono{/bin/sh -c}}
+
+    \mLongSubCmdRow
+    {RUN}
+    {["<executable>", "<param1>", "<param2>"]}
+    {Executable form. The square brackets are a part of the syntax}
+
+    \mCmdRow
+    {CMD}
+    {...}
+    {Provides defaults for executing container. There could be at most one
+      \mMono{CMD} instruction in a Dockerfile
+    }
+
+    \mLongSubCmdRow
+    {CMD}
+    {["<executable>", "<param1>", "<param2>"]}
+    {Executable form}
+
+    \mLongSubCmdRow
+    {CMD}
+    {["<param1>", "<param2>"]}
+    {Provide default arguments to \mMono{ENTRYPOINT}}
+
+    \mLongSubCmdRow
+    {CMD}
+    {<command args ...>}
+    {Run the command in the shell \mMono{/bin/sh -c}}
+
+    \mCmdRow
+    {ENTRYPOINT ...}
+    {}
+    {Helps you configure a container that can be run as an executable.  The
+      \mMono{ENTRYPOINT} instruction adds an entry command that is not
+      overwritten when arguments are passed to docker run. This is different
+      from the behavior of \mMono{CMD}. This allows arguments to be passed to
+      the entrypoint
+    }
+
+    \mLongSubCmdRow
+    {ENTRYPOINT}
+    {["<executable>", "<param1>", "<param2>"]}
+    {Executable form}
+
+    \mLongSubCmdRow
+    {ENTRYPOINT}
+    {<command param1 param2 ...>}
+    {Run the command in the shell \mMono{/bin/sh -c}}
+
+    \mLongCmdRow
+    {EXPOSE}
+    {<port1> <port2> ...}
+    {Informs Docker that the container listens on the
+      specified network ports at runtime. Docker uses this information to
+      interconnect containers using links and to set up port redirection on the
+      host system
+    }
+
+    \mCmdRow
+    {ENV}
+    {<key> <value>}
+    {Sets the environment variable \mMono{<key>} to
+      the value \mMono{<value>}. This value is passed to all future
+      \mMono{RUN}, \mMono{ENTRYPOINT}, and \mMono{CMD} instructions
+    }
+
+    \mLongCmd
+    {COPY}
+    {<src> <dest>}
+
+    \mLongCmdRow
+    {COPY}
+    {["<src>", ... "<dest>"]}
+    {Copies new files, directories or remote file URLs to the filesystem of the
+      container at path \mMono{<dest>}. All new files and directories are
+      created with mode 0755 and with the uid and gid of 0.
+    }
+
+    \mLongCmd
+    {ADD}
+    {<src> <dest>}
+
+    \mLongCmdRow
+    {ADD}
+    {["<src>", ... "<dest>"]}
+    {Like \mMono{COPY}, but additionally allows \mMono{<src>} to be an URL, and if
+      \mMono{<src>} is an archive in a recognized format, it will be unpacked.
+      The best practice is to prefer \mMono{COPY}
+    }
+
+    \mLongCmdRow
+    {VOLUME}
+    {["/some/path"]}
+    {Creates a mount point with the specified name and marks it as holding
+      externally-mounted volumes from the native host or from other containers
+    }
+
+    \mLongCmd
+    {USER}
+    {<user>}
+
+    \mLongCmdRow
+    {USER}
+    {<user>:<group>}
+    {Sets the username or UID used for running subsequent commands.
+      \mMono{<user>} can be either username or UID; \mMono{<group>} can be either
+      group name or GID
+    }
+
+    \mLongCmdRow
+    {WORKDIR}
+    {/path/to/workdir}
+    {Sets the working directory for the \mMono{RUN}, \mMono{CMD},
+      \mMono{ENTRYPOINT}, \mMono{COPY} and \mMono{ADD} Dockerfile commands that
+      follow. Relative paths are defined relative to the path of the previous
+      \mMono{WORKDIR} instruction.
+    }
+
+    \mLongCmd
+    {ARG}
+    {<name>}
+
+    \mLongCmdRow
+    {ARG}
+    {<name>=<default value>}
+    {Defines a variable that users can pass at build-time to the builder with
+      the \mMono{docker build} command using the \mMono{--build-arg <varname>=<value>}
+      flag
+    }
+
+    \mLongCmdRow
+    {ONBUILD}
+    {<instruction>}
+    {Adds a trigger instruction to an image. The trigger is executed at a later
+      time, when the image is used as the base for another build. Docker
+      executes the trigger in the context of the downstream build, as if the
+      trigger existed immediately after the FROM instruction in the downstream
+      Dockerfile.
+    }
+
+  \end{mTable}
+
+  \pagebreak
+
+  \section*{DOCKER CLI QUICK REFERENCE}
+
+  \mSectionTitle{Building images}
+  \begin{mTable}
+    \mLongCmdRow
+    {\$ docker build}
+    {[<opts>] <path> | <URL>}
+    {Build a new image from the source code at \mMono{PATH}}
+
+    \mLongSubCmdRow
+    {-f, --file}
+    {path/to/Dockerfile}
+    {Path to the Dockerfile to use. Default: \texttt{Dockerfile}.}
+
+    \mLongSubCmdRow
+    {--build-arg}
+    {<varname>=<value>}
+    {Name and value of a build argument defined with \mMono{ARG} Dockerfile
+      instruction
+    }
+
+    \mLongSubCmdRow
+    {-t}
+    {"<name>[:<tag>]"}
+    {Repository names (and optionally with tags) to be applied to the resulting
+    image}
+
+    \mLongSubCmdRow
+    {--label}
+    {=<label>}
+    {Set metadata for an image}
+
+    \mSubCmdRow
+    {-q, --quiet}
+    {}
+    {Suppress the output generated by containers}
+
+    \mSubCmdRow
+    {--rm}
+    {}
+    {Remove interm­ediate containers after a successful build}
+
+  \end{mTable}
+
+  %\begin{mExample}
+  %\begin{verbatim}
+%$ docker build .
+%$ docker build -t mycompany.com/myimage:1.5 \
+               %-f path/to/Dockerfile . \end{verbatim}
+  %\end{mExample}
+
+  \mSectionTitle{Creating, running and stopping containers}
+
+  \begin{mTable}
+    \mLongCmdRow
+    {\$ docker run}
+    {[<opts>] <image> [<command>] [<arg>...]}
+    {Run a command in a new container}
+
+    \mLongSubCmdRow
+    {-i, --interactive}
+    {}
+    {Keep STDIN open even if not attached}
+
+    \mSubCmdRow
+    {-t, --tty}
+    {}
+    {Allocate a pseudo-TTY}
+
+    \mLongSubCmdRow
+    {-v, --volume}
+    {[<host-dir>:]<container-dir>[:<opts>]}
+    {
+      Bind mount a volume. Options are comma-separated:
+      \texttt{[ro,rw]}. By default, \texttt{rw} is used.
+    }
+
+    \mLongSubCmdRow
+    {--device}
+    {=<host-dev>:<container-dev>[:<opts>]}
+    {
+      Add a host device to the container; e.g.
+      \mMono{--device="/dev/sda:/dev/xvdc:rwm"}.
+
+      Possible \mMono{<opts>} flags: \mMono{r}:
+      read, \mMono{w}: write, \mMono{m}: mknod
+    }
+
+    \mSubCmdRow
+    {-d, --detach}
+    {}
+    {Detached (daemon) mode}
+
+    \mLongSubCmdRow
+    {-e, --env}
+    {NAME[="value"]}
+    {Set environment variable. If the \mMono{value} is omitted, the value
+    will be taken from the current environment.}
+
+    \mLongSubCmdRow
+    {--env-file}
+    {file}
+    {Read in a line delimited file of environment variables}
+
+    \mLongSubCmdRow
+    {--entrypoint}
+    {"some/entry/point"}
+    {Overwrite the default \mMono{ENTRYPOINT} of the image}
+
+    \mLongSubCmdRow
+    {-h, --hostname}
+    {="<hostname>"}
+    {Container host name}
+
+    \mLongSubCmdRow
+    {--add-host}
+    {=<hostname>:<ip>}
+    {Add a custom host-to-IP mapping}
+
+    \mLongSubCmdRow
+    {--net}
+    {="<mode>"}
+    {Set the network mode for the container (default: \mMono{bridge}):
+      \vspace{-\topsep}
+      \begin{itemize}
+        \item \mMono{bridge}: create a network stack on the default Docker bridge
+        \item \mMono{none}: no networking
+        \item \mMono{container:<name|id>}: reuse another container's stack
+        \item \mMono{host}: use the Docker host network stack
+        \item \mMono{<network-name>|<network-id>}: connect to a user-defined network
+      \end{itemize}
+      \vspace{-\topsep}
+      \vspace{-\topsep}
+    }
+
+    \mLongSubCmdRow
+    {--group-add}
+    {=<groups>}
+    {Add additional groups to run as}
+
+    \mSubCmdRow
+    {--rm}
+    {}
+    {Automatically remove the container when it exits}
+
+    \mSubCmdRow
+    {--name}
+    {"foo"}
+    {Assign a name to the container}
+
+    \mLongSubCmdRow
+    {--detach-keys}
+    {="<keys>"}
+    {Override the key sequence to detach a container. Default: \mMono{"ctrl-p ctrl-q"}}
+
+    \mLongCmdRow
+    {\$ docker create}
+    {[<opts>] <image> [<command>] [<arg>...]}
+    {
+      Create a new container, but don't run it (instead, print its id).
+      See options for \mMono{docker run}
+    }
+
+    \mLongCmdRow
+    {\$ docker start}
+    {[<opts>] <container> [<container>...]}
+    {Start one or more containers}
+
+    \mSubCmdRow
+    {-a, --attach}
+    {}
+    {Attach container's STDOUT and STDERR and forward all signals to the process}
+
+    \mLongSubCmdRow
+    {-i, --interactive}
+    {}
+    {Attach container's STDIN}
+
+    \mLongCmdRow
+    {\$ docker stop}
+    {[<opts>] <container> [<container>...]}
+    {Stop one or more containers by sending SIGTERM and then SIGKILL after a grace period}
+
+    \mLongSubCmdRow
+    {-t, --time}
+    {[=10]}
+    {Number of seconds to wait before killing the container}
+
+    \mLongCmdRow
+    {\$ docker kill}
+    {[<opts>] <container> [<container>...]}
+    {Kill a runing container using SIGKILL or a specified signal}
+
+    \mLongSubCmdRow
+    {-s, --signal}
+    {[="KILL"]}
+    {Signal to send to the container}
+
+    \mLongCmdRow
+    {\$ docker pause}
+    {<container> [<container>...]}
+    {Pause all processes within a container}
+
+    \mLongCmdRow
+    {\$ docker unpause}
+    {<container> [<container>...]}
+    {Unpause all processes within a container}
+
+  \end{mTable}
+
+  \pagebreak
+
+  \section*{DOCKER CLI QUICK REFERENCE (continued)}
+  \mSectionTitle{Interacting with running containers}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker attach}
+    {[<opts>] <container>}
+    {Attach to a running container}
+
+    \mSubCmdRow
+    {--no-stdin}
+    {}
+    {Do not attach STDIN (i.e. attach in read-only mode)}
+
+    \mLongSubCmdRow
+    {--detach-keys}
+    {="<keys>"}
+    {Override the key sequence to detach a container. Default: \mMono{"ctrl-p ctrl-q"}}
+
+    \mLongCmdRow
+    {\$ docker exec}
+    {[<opts>] <container> <command> [<arg> ...]}
+    {Run a process in a running container}
+
+    \mLongSubCmdRow
+    {-i, --interactive}
+    {}
+    {Keep STDIN open even if not attached}
+
+    \mSubCmdRow
+    {-t, --tty}
+    {}
+    {Allocate a pseudo-TTY}
+
+    \mSubCmdRow
+    {-d, --detach}
+    {}
+    {Detached (daemon) mode}
+
+    \mLongCmdRow
+    {\$ docker top}
+    {<container> [<ps options>]}
+    {Display the running processes within a container.
+      The \mMono{ps options} are any options you would give to the \mMono{ps} command}
+
+    \mLongCmd
+    {\$ docker cp}
+    {[<opts>] <container>:<src\_path> <host\_dest\_path>}
+    \mLongCmdRow
+    {\$ docker cp}
+    {[<opts>] <host\_src\_path> <container>:<dest\_path>}
+    {Copy files/folders between a container and the local filesystem.
+      Behaves like Linux command \mMono{cp -a}. It's possible to specify \mMono{-}
+      as either the \mMono{host\_dest\_path} or \mMono{host\_src\_path}, in which
+      case you can also stream a tar archive.
+    }
+
+    \mLongSubCmdRow
+    {-L, --follow-link}
+    {}
+    {Follow symbol link in source path}
+
+    \mLongCmdRow
+    {\$ docker logs}
+    {[<opts>] <container>}
+    {Fetch the logs of a container}
+
+    \mSubCmdRow
+    {-f, --follow}
+    {}
+    {Follow log output: it combines \mMono{docker log} and \mMono{docker attach}}
+
+    \mLongSubCmdRow
+    {--since}
+    {="<timestamp>"}
+    {Show logs since the given timestamp}
+
+    \mLongSubCmdRow
+    {-t, --timestamps}
+    {}
+    {Show timestamps}
+
+    \mSubCmdRow
+    {--tail}
+    {="<n>"}
+    {Output the specified number of lines at the end of logs}
+
+    \mLongCmdRow
+    {\$ docker wait}
+    {<container> [<container>...]}
+    {Block until a container stops, then print its exit code}
+
+  \end{mTable}
+
+  \mSectionTitle{Saving and loading images and containers}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker save}
+    {[<opts>] <image> [<image>...]}
+    {Save one or more images to a tar archive (streamed to STDOUT by default)}
+
+    \mLongSubCmdRow
+    {-o, --output}
+    {=""}
+    {Write to a file instead of STDOUT}
+
+    \mLongCmdRow
+    {\$ docker load}
+    {[<opts>]}
+    {Load image(s) from a tar archive or STDIN. Restores both images and tags}
+
+    \mLongSubCmdRow
+    {-i, --input}
+    {="<tar-archive>"}
+    {Read from a tar archive file, instead of STDIN. The tarball may be
+      compressed with gzip, bzip, or xz.
+    }
+
+    \mSubCmdRow
+    {-q, --quiet}
+    {}
+    {Suppress the load progress bar}
+
+    \mLongCmdRow
+    {\$ docker export}
+    {[<opts>] <container>}
+    {Export the contents of a container's filesystem as a tar archive}
+
+    \mLongSubCmdRow
+    {-o, --output}
+    {="<file>"}
+    {Write to a file instead of STDOUT}
+
+    \mLongCmdRow
+    {\$ docker import}
+    {[<opts>] <file>|<URL>|- [<repository>[:<tag>]]}
+    {Create  an empty filesystem image and import the contents of the tarball
+      into it, then optionally tag it.
+    }
+
+    \mLongSubCmdRow
+    {-c, --change}
+    {=[]}
+    {Apply specified Dockerfile instructions while importing the image; one of
+      these: \mMono{CMD, ENTRYPOINT, ENV, EXPOSE, ONBUILD, USER, VOLUME, WORKDIR}
+    }
+
+    \mLongSubCmdRow
+    {-m, --message}
+    {="<msg>"}
+    {Set commit message for imported image}
+
+  \end{mTable}
+
+  \mSectionTitle{Communicating with Docker Registry}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker login}
+    {[<opts>] [<server>]}
+    {Log in to a Docker Registry on the specified \mMono{<server>}. If server is
+      omitted, \mMono{https://registry-1.docker.io} is used. Credentials are
+      stored in \mMono{$_{\widetilde{~}}$/.docker/config.json}
+    }
+
+    \mLongSubCmd
+    {-u, --username}
+    {="<username>"}
+
+    \mLongSubCmd
+    {-p, --password}
+    {="<password>"}
+
+    \mLongCmdRow
+    {\$ docker logout}
+    {[<server>]}
+    {Log out from a Docker Registry on the specified \mMono{<server>}. If
+      server is omitted, \mMono{https://registry-1.docker.io} is used.
+    }
+
+    \mLongCmdRow
+    {\$ docker push}
+    {[<registry\_host>[:<registry\_port>]/]<name>[:<tag>]}
+    {Push an image or a repository to a Registry}
+
+    \mLongCmdRow
+    {\$ docker pull}
+    {[<opts>] [<registry\_host>[:<registry\_port>]/]<name>[:<tag>]}
+    {Pull an image or a repository from a Registry}
+
+    \mLongSubCmdRow
+    {-a, --all-tags}
+    {}
+    {Download all tagged images in the repository}
+
+  \end{mTable}
+
+  \pagebreak
+
+  \mSectionTitle{Listing images and containers}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker images}
+    {[<opts>]}
+    {List images}
+
+    \mSubCmdRow
+    {-a, --all}
+    {}
+    {Show all images (by default, intermediate image layers aren't shown)}
+
+    \mSubCmdRow
+    {--no-trunc}
+    {}
+    {Don't truncate output}
+
+    \mLongSubCmdRow
+    {-f, --filter}
+    {="<filter>"}
+    {Filter output based on these conditions:
+      \vspace{-\topsep}
+      \begin{itemize}
+        \item \mMono{dangling=true} - unused (untagged) images
+        \item \mMono{label=<key>} or \mMono{label=<key>=<value>}
+      \end{itemize}
+      \vspace{-\topsep}
+      \vspace{-\topsep}
+    }
+
+    \mLongSubCmdRow
+    {--format}
+    {="<template>"}
+    {Pretty-print containers using a Go template, e.g. \mMono{\{\{.ID\}\}}. Valid placeholders:
+      \vspace{-\topsep}
+      \begin{itemize}
+        \item \mMono{.ID} - Image ID
+        \item \mMono{.Repository} - Image repository
+        \item \mMono{.Tag} - Image tag
+        \item \mMono{.Digest} - Image digest
+        \item \mMono{.CreatedSince} - Time since the image was created
+        \item \mMono{.CreatedAt} - Time when the image was created
+        \item \mMono{.Size} - Image disk size
+      \end{itemize}
+      \vspace{-\topsep}
+      \vspace{-\topsep}
+    }
+
+    \mLongCmdRow
+    {\$ docker ps}
+    {[<opts>]}
+    {List containers}
+
+    \mSubCmdRow
+    {-a, --all}
+    {}
+    {Show all containers (including non-running ones)}
+
+    \mSubCmdRow
+    {--no-trunc}
+    {}
+    {Don't truncate output}
+
+    \mSubCmdRow
+    {-q, --quiet}
+    {}
+    {Only display numeric IDs}
+
+    \mLongSubCmdRow
+    {-f, --filter}
+    {="<filter>"}
+    {Filter output based on these conditions:
+      \vspace{-\topsep}
+      \begin{itemize}
+        \item \mMono{exited=<int>} an exit code of \mMono{<int>}
+        \item \mMono{label=<key>} or \mMono{label=<key>=<value>}
+        \item \mMono{status=(created|restarting|running|paused|exited|dead)}
+        \item \mMono{name=<string>} a container's name
+        \item \mMono{id=<ID>} a container's ID
+        \item \mMono{before=(<container-name>|<container-id>)}
+        \item \mMono{since=(<container-name>|<container-id>)}
+        \item \mMono{ancestor=(<image-name>[:tag]|<image-id>| ⟨image@digest⟩)} - containers created from an image or a descendant
+        \item \mMono{volume=(<volume-name>|<mount-point-destination>)}
+      \end{itemize}
+      \vspace{-\topsep}
+      \vspace{-\topsep}
+    }
+
+    \mLongSubCmdRow
+    {--format}
+    {="<template>"}
+    {Pretty-print containers using a Go template, e.g. \mMono{\{\{.ID\}\}}. Valid placeholders:
+      \vspace{-\topsep}
+      \begin{itemize}
+        \item \mMono{.ID} - Container ID
+        \item \mMono{.Image} - Image ID
+        \item \mMono{.Command} - Quoted command
+        \item \mMono{.CreatedAt} - Time when the container was created.
+        \item \mMono{.RunningFor} - Time since the container was started.
+        \item \mMono{.Ports} - Exposed ports.
+        \item \mMono{.Status} - Container status.
+        \item \mMono{.Size} - Container disk size.
+        \item \mMono{.Names} - Container names.
+        \item \mMono{.Labels} - All labels assigned to the container.
+        \item \mMono{.Label} - Value of a specific label for this container. For example \mMono{\{\{.Label "com.docker.swarm.cpu"\}\}}
+        \item \mMono{.Mounts} - Names of the volumes mounted.
+      \end{itemize}
+      \vspace{-\topsep}
+      \vspace{-\topsep}
+    }
+
+  \end{mTable}
+
+  \mSectionTitle{Inspecting images and containers}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker inspect}
+    {[<opts>] <container>|<image> [<container>|<image>...]}
+    {Return low-level information on a container or image}
+
+    \mLongSubCmdRow
+    {-f, --format}
+    {="<format>"}
+    {Format the output using the given Go template. You can see the available
+      placeholders by looking at the total output without \mMono{--format}
+    }
+
+    \mSubCmdRow
+    {-s, --size}
+    {}
+    {Display total file sizes if the type is container}
+
+    \mLongSubCmdRow
+    {-t, --type}
+    {="<container>|<image>"}
+    {Return JSON for specified type only}
+
+  \end{mTable}
+
+  \mSectionTitle{Removing images and containers}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker rm}
+    {[<opts>] <container> [<container>...]}
+    {Remove one or more containers from the host}
+
+    \mSubCmdRow
+    {-f, --force}
+    {}
+    {Force the removal of a running container (uses SIGKILL)}
+
+    \mSubCmdRow
+    {-f, --link}
+    {}
+    {Remove the specified link and not the underlying container}
+
+    \mSubCmdRow
+    {-v, --volume}
+    {}
+    {Remove the volumes associated with the container}
+
+    \mLongCmdRow
+    {\$ docker rmi}
+    {[<opts>] <image> [<image>...]}
+    {Remove one or more images from the host}
+
+    \mSubCmdRow
+    {-f, --force}
+    {}
+    {Force the removal of images of a running container}
+
+    \mSubCmdRow
+    {--no-prune}
+    {}
+    {Do not delete untagged parents}
+
+  \end{mTable}
+
+%\end{multicols}
+\end{twocolumn}
+\end{document}
