@@ -137,6 +137,10 @@
 
   \section*{DOCKERFILE QUICK REFERENCE}
 
+  \vspace{-\topsep}
+  See \textbf{\mMono{\$ man dockerfile}} for detailed reference
+  \vspace{\topsep}
+
   \begin{mTable}
 
     \mLongCmd
@@ -323,6 +327,11 @@
   \pagebreak
 
   \section*{DOCKER CLI QUICK REFERENCE}
+
+  \vspace{-\topsep}
+  See \textbf{\mMono{\$ man docker-<command>}} for detailed reference;
+   e.g. \textbf{\mMono{\$ man docker-build}}
+  \vspace{-\topsep}
 
   \mSectionTitle{Building images}
   \begin{mTable}
