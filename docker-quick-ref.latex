@@ -930,6 +930,25 @@
 
   \end{mTable}
 
+  \vspace{\topsep}
+
+  {
+    \leftskip = 0pt plus 1 fill
+    \rightskip = 0pt
+    \parindent 0pt
+    \obeylines
+
+    \rule{\columnwidth * 6 / 7}{0.4pt}
+
+    \tiny{
+      by Dmitry Frank \url{http://dmitryfrank.com}
+
+      License: MIT
+
+      Your contributions to this card are welcome: \url{https://github.com/dimonomid/docker-quick-ref}
+    }
+  }
+
 %\end{multicols}
 \end{twocolumn}
 \end{document}
