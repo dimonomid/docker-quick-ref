@@ -904,7 +904,7 @@
     {Force the removal of a running container (uses SIGKILL)}
 
     \mSubCmdRow
-    {-f, --link}
+    {-l, --link}
     {}
     {Remove the specified link and not the underlying container}
 
