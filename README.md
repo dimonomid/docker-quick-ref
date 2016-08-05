@@ -33,3 +33,7 @@ $ make
 ```
 
 And check out the `build/docker-quick-ref.pdf` file.
+
+## License
+
+MIT
