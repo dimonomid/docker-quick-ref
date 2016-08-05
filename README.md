@@ -8,6 +8,8 @@ which I can print once and constantly keep on my desktop:
 
 [![](http://dmitryfrank.com/_media/projects/docker_quick_ref_icon.png)](https://github.com/dimonomid/docker-quick-ref/releases/download/latest/docker-quick-ref.pdf)
 
+*(click the thumbnail to download pdf)*
+
 The appearance of the card is largely inspired by the [GDB Quick
 Reference](http://www.cs.nyu.edu/courses/spring07/V22.0474-001/misc/gdb-refcard.pdf),
 since I was using it for a long time already, and it was a very pleasant
