@@ -476,6 +476,11 @@
     {}
     {Automatically remove the container when it exits}
 
+    \mLongSubCmdRow
+    {--restart}
+    {="no|on-failure[:<max-retry>]|always|unless-stopped"}
+    {Restart policy; default: \mMono{no}}
+
     \mSubCmdRow
     {--name}
     {"foo"}
