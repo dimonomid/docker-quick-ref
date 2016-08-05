@@ -1,7 +1,7 @@
 # Docker: Printable Quick Reference (Cheat Sheet)
 
 I use [Docker](http://docker.com), but not often enough to memorize even basic
-Dockerfile instructions and CLI commands. After all I got so much annoyed by
+Dockerfile instructions and CLI commands. After all I got so annoyed by
 being unable to quickly sketch some Dockerfile or to do something with the
 existing containers occasionally, so I decided to write a concise cheat sheet
 which I can print once and constantly keep on my desktop:
@@ -21,7 +21,7 @@ because my LaTeX-fu is too weak, but in my opinion, LaTeX shines best for the
 cases when the user believes that LaTeX knows better. This was not the case
 here, since I had to pack lots of stuff in two pages, and I had to fight with
 LaTeX a lot, rather than embracing it. If anyone knows how to structure the
-document better, your comments are appreciated.
+document better, your comments / PRs are appreciated.
 
 ## Build
 
