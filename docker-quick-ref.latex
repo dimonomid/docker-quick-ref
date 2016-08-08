@@ -705,6 +705,176 @@
 
   \end{mTable}
 
+  \mSectionTitle{Docker Networking}
+
+  \begin{mTable}
+
+    \mLongCmdRow
+    {\$ docker network connect}
+    {[<opts>] <network> <container>}
+    {Connect a container to a network}
+
+    \mLongSubCmdRow
+    {--alias}
+    {value}
+    {Add network-scoped alias for the container (default [])}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+    \mLongSubCmdRow
+    {--ip}
+    {string}
+    {IP Address}
+
+    \mLongSubCmdRow
+    {--ip6}
+    {string}
+    {IPv6 Address}
+
+    \mLongSubCmdRow
+    {--link}
+    {value}
+    {Add link to another container (default [])}
+
+    \mLongSubCmdRow
+    {--link-local-ip}
+    {value}
+    {Add a link-local address for the container (default [])}
+
+    \mLongCmdRow
+    {\$ docker network create}
+    {[<opts>]}
+    {Create a network}
+
+    \mLongSubCmdRow
+    {--aux-address}
+    {value}
+    {Auxiliary IPv4 or IPv6 addresses used by Network driver (default map[])}
+
+    \mLongSubCmdRow
+    {-d, --driver}
+    {string}
+    {Driver to manage the Network (default "bridge")}
+
+    \mLongSubCmdRow
+    {--gateway}
+    {value}
+    {IPv4 or IPv6 Gateway for the master subnet (default [])}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+    \mLongSubCmdRow
+    {--internal}
+    {}
+    {Restrict external access to the network}
+
+    \mLongSubCmdRow
+    {--ip-range}
+    {value}
+    {Allocate container ip from a sub-range (default [])}
+
+    \mLongSubCmdRow
+    {--ipam-driver}
+    {string}
+    {IP Address Management Driver (default "default")}
+
+    \mLongSubCmdRow
+    {--ipam-opt}
+    {value}
+    {Set IPAM driver specific options (default map[])}
+    \mLongSubCmdRow
+    {--ipv6}
+    {}
+    {Enable IPv6 networking}
+
+    \mLongSubCmdRow
+    {--label}
+    {value}
+    {Set metadata on a network (default [])}
+
+    \mLongSubCmdRow
+    {-o, --opt}
+    {value}
+    {Set driver specific options (default map[])}
+
+    \mLongSubCmdRow
+    {--subnet}
+    {value}
+    {Subnet in CIDR format that represents a network segment (default [])}
+
+    \mLongCmdRow
+    {\$ docker network disconnect}
+    {[<opts>] <network> <container>}
+    {Disconnect a container from a network}
+
+    \mLongSubCmdRow
+    {-f, --force}
+    {}
+    {Force the container to disconnect from a network}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+    \mLongCmdRow
+    {\$ docker network inspect}
+    {[<opts>] <network> [<network>...]}
+    {Display detailed information on one or more networks}
+
+    \mLongSubCmdRow
+    {-f, --format}
+    {string}
+    {Format the output using the given go template}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+    \mLongCmdRow
+    {\$ docker network ls}
+    {[<opts>]}
+    {List networks}
+
+    \mLongSubCmdRow
+    {-f, --filter}
+    {value}
+    {Provide filter values (i.e. 'dangling=true') (default [])}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+    \mLongSubCmdRow
+    {--no-trunc}
+    {}
+    {Do not truncate the output}
+
+    \mLongSubCmdRow
+    {-q, --quiet}
+    {}
+    {Only display volume names}
+
+    \mLongCmdRow
+    {\$ docker network rm}
+    {<network> [<network>...]}
+    {Remove a network}
+
+    \mLongSubCmdRow
+    {--help}
+    {}
+    {Print usage}
+
+  \end{mTable}
+
   \mSectionTitle{Communicating with Docker Registry}
 
   \begin{mTable}
