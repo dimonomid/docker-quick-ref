@@ -25,10 +25,11 @@ document better, your comments / PRs are appreciated.
 
 ## Build
 
-You need `pdflatex`. Once you have it, just type in your terminal, from the
+You need docker. Once you have it, just type in your terminal, from the
 repository:
 
-```
+```bash
+$ make my-pdflatex-docker # needs to be done once, to build a docker image
 $ make
 ```
 
